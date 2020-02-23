@@ -11,17 +11,11 @@ Vue.use(ElementUi)
 Vue.prototype.$axios = axios
 
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1'
+axios.interceptors.request.use(config => {
+  config.headers.authorization = window.sessionStorage.getItem('token')
+  return config
+})
 
-// axios({
-//   method: 'post',
-//   url: '/login',
-//   data: {
-//     username: 'admin',
-//     password: '123456'
-//   }
-// }).then(res => {
-//   console.log(res);
-// });
 
 
 Vue.config.productionTip = false
