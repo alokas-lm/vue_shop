@@ -14,16 +14,16 @@
       </el-row>
       <tree-table :data="cateList" :columns="columns" :selection-type="false" :expand-type="false"
                   :show-index="true" border>
-        <template slot="isok" slot-scope="scope">
+        <template v-slot:isok="scope">
           <i class="el-icon-success" v-if="scope.row.cat_deleted === false" style="color: lightgreen;"></i>
           <i class="el-icon-error" v-else style="color: red"></i>
         </template>
-        <template slot="order" slot-scope="scope">
+        <template v-slot:order="scope">
           <el-tag v-if="scope.row.cat_level === 0">一级</el-tag>
           <el-tag type="success" v-else-if="scope.row.cat_level === 1">二级</el-tag>
           <el-tag type="warning" v-else="scope.row.cat_level === 2">三级</el-tag>
         </template>
-        <template slot="operation" slot-scope="scope">
+        <template v-slot:operation="scope">
           <el-button type="primary" size="small" icon="el-icon-edit" @click="setCateInfo">修改</el-button>
           <el-button type="danger" size="small" class="el-icon-delete"> 删除</el-button>
         </template>
@@ -57,7 +57,6 @@
     <el-button type="primary" @click="addCate">确 定</el-button>
   </span>
     </el-dialog>
-
 
 
   </div>
@@ -110,9 +109,9 @@
     },
     methods: {
       async getCateList() {
-        const { data: res} = await this.$axios.get('/categories', {params: this.queryInfo})
+        const {data: res} = await this.$axios.get('/categories', {params: this.queryInfo})
         console.log(res.data);
-        if(res.meta.status !== 200) {
+        if (res.meta.status !== 200) {
           return this.$message.error('获取商品分类列表失败')
         }
         this.cateList = res.data.result
@@ -134,14 +133,14 @@
       },
       async getParentCateList() {
         const {data: res} = await this.$axios.get('categories', {params: {type: 2}})
-        if(res.meta.status !== 200) {
+        if (res.meta.status !== 200) {
           return this.$message.error('获取分类列表失败')
         }
         this.parentCateList = res.data
       },
       parentCateChange() {
         console.log(this.selectKeys.length);
-        if (this.selectKeys.length > 0){
+        if (this.selectKeys.length > 0) {
           //父级分类的ID
           this.addCateForm.cat_pid = this.selectKeys[this.selectKeys.length - 1]
           //为当前分类的等级赋值
@@ -154,11 +153,11 @@
         //   this.addCateForm.cat_level = 0
         // }
       },
-       addCate() {
+      addCate() {
         this.$refs.addFormRef.validate(async valid => {
-          if(!valid) return
+          if (!valid) return
           const {data: res} = await this.$axios.post('categories', this.addCateForm)
-          if(res.meta.status !== 201) {
+          if (res.meta.status !== 201) {
             return this.$message.error('添加分类失败')
           }
           this.$message.success('添加分类成功')
@@ -184,9 +183,11 @@
   .el-tag {
     margin: 2px;
   }
+
   .el-button {
     text-indent: 0px;
   }
+
   .el-row {
     margin-bottom: 15px;
   }

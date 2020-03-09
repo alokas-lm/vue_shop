@@ -245,7 +245,7 @@
         this.editForm = res.data
         this.editDialogVisible = true
       },
-      editUsers(id) {
+      editUsers() {
         this.$refs.editFormRef.validate(async valid => {
           if(!valid) return this.$message.error('用户信息填写不正确')
           const {data: res} = await this.$axios.put(`users/`+ this.editForm.id, this.editForm)
