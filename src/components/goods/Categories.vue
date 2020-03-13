@@ -109,7 +109,7 @@
     },
     methods: {
       async getCateList() {
-        const {data: res} = await this.$axios.get('/categories', {params: this.queryInfo})
+        const {data: res} = await this.$axios.get('categories', {params: this.queryInfo})
         console.log(res.data);
         if (res.meta.status !== 200) {
           return this.$message.error('获取商品分类列表失败')

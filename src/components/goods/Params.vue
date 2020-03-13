@@ -8,8 +8,8 @@
 
     <el-card>
       <el-alert
-              title="注意：只允许为第三级分类设置相关参数"
-              type="warning" show-icon :closable="false">
+        title="注意：只允许为第三级分类设置相关参数"
+        type="warning" show-icon :closable="false">
 
       </el-alert>
       <el-row class="style">
@@ -28,16 +28,17 @@
             <el-table-column type="expand">
               <template v-slot="scope">
                 <el-tag class="tag-style" closable v-for="(item, i) in scope.row.attr_vals" :key="i"
-                @close="handleClosed(i, scope.row)">{{item}}</el-tag>
+                        @close="handleClosed(i, scope.row)">{{item}}
+                </el-tag>
 
                 <el-input
-                        class="input-new-tag"
-                        v-if="scope.row.inputVisible"
-                        v-model="scope.row.inputValue"
-                        ref="saveTagInput"
-                        size="small"
-                        @keyup.enter.native="handleInputConfirm(scope.row)"
-                        @blur="handleInputConfirm(scope.row)"
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
                 <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag
@@ -63,7 +64,24 @@
           </el-button>
           <el-table :data="onlyData" border stripe>
             <el-table-column type="expand">
+              <template v-slot="scope">
+                <el-tag class="tag-style" closable v-for="(item, i) in scope.row.attr_vals" :key="i"
+                        @close="handleClosed(i, scope.row)">{{item}}
+                </el-tag>
 
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
+                >
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag
+                </el-button>
+              </template>
             </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
@@ -83,10 +101,10 @@
     </el-card>
     <!--添加参数的Dialog-->
     <el-dialog
-            :title="'添加' + titleText"
-            :visible.sync="addDialogVisible"
-            width="50%"
-            @close="addDialogClosed">
+      :title="'添加' + titleText"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed">
       <el-form :model="addRuleForm" :rules="rules" ref="ruleFormRef" label-width="100px">
         <el-form-item :label="titleText" prop="attr_name">
           <el-input v-model="addRuleForm.attr_name"></el-input>
@@ -99,10 +117,10 @@
     </el-dialog>
     <!--修改参数的Dialog-->
     <el-dialog
-            :title="'修改' + titleText"
-            :visible.sync="editDialogVisible"
-            width="50%"
-            @close="editDialogClosed">
+      :title="'修改' + titleText"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed">
       <el-form :model="editForm" :rules="editFormRules" ref="setRuleFormRef" label-width="100px">
         <el-form-item :label="titleText" prop="attr_name">
           <el-input v-model="editForm.attr_name"></el-input>
@@ -128,7 +146,7 @@
           value: 'cat_id',
           label: 'cat_name',
           children: 'children',
-          checkStrictly: true
+          // checkStrictly: true
         },
         selectKeys: [],
         activeName: 'many',
@@ -166,6 +184,11 @@
       },
       //级联选择框选中项变化，会触发此函数
       handleChange() {
+        if (this.selectKeys.length !== 3) {
+          this.selectKeys = [];
+          this.manyDate = [],
+            this.onlyData = []
+        }
         this.getParamsData()
       },
       handleClick() {
@@ -216,7 +239,7 @@
       async showEditParams(id) {
         this.editDialogVisible = true
         const {data: res} = await this.$axios.get(`categories/${this.cateId}/attributes/${id}`,
-            {attr_sel: this.activeName})
+          {attr_sel: this.activeName})
         if (res.meta.status !== 200) return this.$message.error('获取参数失败')
         this.editForm = res.data
       },
@@ -264,16 +287,7 @@
         row.attr_vals.push(row.inputValue.trim())
         row.inputValue = ''
         row.inputVisible = false
-        // const {data: res} = await this.$axios.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
-        //   attr_name: row.attr_name,
-        //   attr_sel: row.attr_sel,
-        //   attr_vals: row.attr_vals.join(' ')
-        // })
-        // if (res.meta.status !== 200) {
-        //   return this.$message.error('标签更新失败')
-        // }
-        // this.$message.success('标签更新成功')
-this.saveAttrVals(row)
+        this.saveAttrVals(row)
       },
       async saveAttrVals(row) {
         const {data: res} = await this.$axios.put(`categories/${this.cateId}/attributes/${row.attr_id}`, {
@@ -287,8 +301,8 @@ this.saveAttrVals(row)
         this.$message.success('标签更新成功')
       },
 
-      async handleClosed (i, row) {
-          row.attr_vals.splice(i, 1);
+      async handleClosed(i, row) {
+        row.attr_vals.splice(i, 1);
         this.saveAttrVals(row)
       }
     },

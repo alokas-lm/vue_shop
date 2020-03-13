@@ -14,7 +14,7 @@
         <el-aside :width="isCollapse ? '64px' : '200px'">
           <div class="toggle-button" @click="toggleCollapse">|||</div>
           <el-menu
-                  :default-active="this.$route.path"
+                  :default-active="this.$router.path"
                   class="el-menu-vertical-demo"
                   background-color="#333744"
                   text-color="#fff"
@@ -68,9 +68,14 @@
           '102': 'iconfont icon-danju',
           '145': 'iconfont icon-baobiao',
         },
-        isCollapse: false
+        isCollapse: false,
+        // activePath: ''
       }
     },
+    // created() {
+    //   this.getMenuList()
+    //   this.activePath = window.sessionStorage.getItem('activePath')
+    // },
     methods: {
       logout() {
         window.sessionStorage.clear()
