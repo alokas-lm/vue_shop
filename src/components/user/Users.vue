@@ -226,8 +226,7 @@
         this.$refs.addFormRef.resetFields()
       },
       editDialogClosed() {
-        // this.$refs.editFormRef.resetFields()
-        this.editForm = {}
+        this.$refs.editFormRef.resetFields()
       },
       addUsers() {
         this.$refs.addFormRef.validate(async valid => {
