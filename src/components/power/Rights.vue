@@ -10,7 +10,7 @@
 
     <el-card>
       <!-- 用户列表区域 -->
-      <el-table :data="rightsList" border style="width: 100%">
+      <el-table row-key="id" :data="rightsList" border style="width: 100%">
         <el-table-column type="index" label="#">
         </el-table-column>
         <el-table-column prop="authName" label="权限名称">

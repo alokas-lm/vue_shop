@@ -1,28 +1,36 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import global from './assets/css/global.css'
-import ElementUi from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import './assets/css/global.css'
+// import ElementUi from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
 import './assets/fonts/iconfont.css'
 import axios from 'axios'
 import TreeTable from 'vue-table-with-tree-grid'
 import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.bubble.css'
+import NProgress from 'nprogress'
 
 
-Vue.use(ElementUi)
+// Vue.use(ElementUi)
 Vue.use(VueQuillEditor)
 Vue.prototype.$axios = axios
 
+
+
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1'
+
+//在request 拦截器中，展示进度条
 axios.interceptors.request.use(config => {
+  NProgress.start()
   config.headers.authorization = window.sessionStorage.getItem('token')
   return config
 })
 
+//在response 拦截器中，隐藏进度条
+axios.interceptors.response.use(config => {
+  NProgress.done()
+  return config
+})
 
 
 Vue.config.productionTip = false
@@ -38,7 +46,7 @@ Vue.filter('dateFormat', function (originVal) {
   return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
 })
 new Vue({
-  global,
+  // global,
   router,
   render: h => h(App),
 }).$mount('#app')
